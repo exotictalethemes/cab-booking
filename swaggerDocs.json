@@ -1,0 +1,402 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "cab booking api",
+    "description": "cab booking api",
+    "contact": {
+        "name" : "anish acharya",
+        "email": "aanishacharyaa@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000"
+    },
+    {
+      "url": "http://localhost:4000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations about user",
+      "externalDocs": {
+      }
+    }
+  ],
+  "paths": {
+    "/users": {
+        "get": {
+            "tags": [
+              "users"
+            ],
+            "summary": "get all registered users (for viewing purpose only) (admin) (currently no auth required)",
+            "operationId": "getAllUser",
+            "responses": {
+              "200": {
+                "description": "successful operation"
+              },
+              "404": {
+                "description": "User not found",
+                "content": {}
+              }
+              ,
+              "400": {
+                "description": "available end-points are /users, /booking and /cabs",
+                "content": {}
+              }
+            }
+          },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user (register)",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Created user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+            "400": {
+                "description": "invaild name or email or password",
+                "content": {}
+              }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/users/{userid}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get user details by id",
+        "operationId": "getUserByuserid",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "put user id here. If you don't have then register at (post) /users",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+          ,
+          "400": {
+            "description": "available end-points are /users, /booking and /cabs",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user",
+        "description": "This can only be done by reigstered users.",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "user that need to be updated",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+            "200": {
+                "description": "updated details"
+              },
+          "400": {
+            "description": "Invalid user supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by reigstered user.",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "description": "The user id that needs to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+            "200": {
+                "description": "user with id deleted"
+              },
+          "400": {
+            "description": "Invalid username supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/booking/{userid}": {
+        "post": {
+          "tags": [
+            "booking"
+          ],
+          "summary": "book a cabe",
+          "description": "This can only be done by the registered user.",
+          "operationId": "bookcabe",
+          "parameters": [
+            {
+              "name": "userid",
+              "in": "path",
+              "description": "put user id here. If you don't have then register at (post) /users",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Created booking object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/cabbooking"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+                "description": "booking done!"
+              },
+              "400": {
+                  "description": "invaild to or from provided (must be indian city name )",
+                  "content": {}
+                }
+          },
+          "x-codegen-request-body-name": "body"
+        },
+        "get": {
+            "tags": [
+              "booking"
+            ],
+            "summary": "get previous bookings by id",
+            "operationId": "getUserBookingsByuserid",
+            "parameters": [
+              {
+                "name": "userid",
+                "in": "path",
+                "description": "put user id here. If you don't have then register at (post) /users",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "limit",
+                "in": "query",
+                "description": "limit results",
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              },
+              {
+                "name": "skip",
+                "in": "query",
+                "description": "skip results",
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "successful operation"
+              },
+              "404": {
+                "description": "User not found",
+                "content": {}
+              }
+              ,
+              "400": {
+                "description": "available end-points are /users, /booking and /cabs",
+                "content": {}
+              }
+            }
+          }
+      },
+    "/cabs/{userid}": {
+        "get": {
+            "tags": [
+              "Nearby cabs"
+            ],
+            "summary": "get previous bookings by id",
+            "operationId": "getUserBookingsByuserid",
+            "parameters": [
+              {
+                "name": "userid",
+                "in": "path",
+                "description": "put user id here. If you don't have then register at (post) /users",
+                "required": true,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "limit (bydefault 5)",
+                "in": "query",
+                "description": "limit results",
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              },
+              {
+                "name": "currentCity",
+                "in": "query",
+                "description": "type either city name or mannually type coordinates to get nearby cabs location! should be Indian city or coordinates",
+                "required": false,
+                "schema": {
+                  "type": "string"
+                }
+              },
+              {
+                "name": "latitude",
+                "in": "query",
+                "description": "mannually type : latitude",
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              },
+              {
+                "name": "longitude",
+                "in": "query",
+                "description": "mannually type : longitude",
+                "required": false,
+                "schema": {
+                  "type": "number"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "successful operation"
+              },
+              "404": {
+                "description": "User not found",
+                "content": {}
+              }
+              ,
+              "400": {
+                "description": "available end-points are /users, /booking and /cabs",
+                "content": {}
+              }
+            }
+          }
+    }
+  },
+  "components": {
+    "schemas": {
+      "createUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "cabbooking": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+ 
+  }
+}

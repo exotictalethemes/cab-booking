@@ -1,0 +1,5 @@
+{
+    "events": {
+      "crash": "kill $(lsof -t -i:4000)"
+    }
+  }

@@ -1,0 +1,12 @@
+{
+  "development": {
+    "username": "aa",
+    "password": "aa",
+    "database": "aa",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
+
+
+ 
